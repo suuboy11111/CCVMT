@@ -14,7 +14,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
   const assignee = mockUsers.find(u => u.id === task.assigneeId);
 
   const getBadgeVariant = (type: string) => {
-    switch(type) {
+    switch (type) {
       case 'BUG': return 'red';
       case 'STORY': return 'green';
       case 'EPIC': return 'purple';

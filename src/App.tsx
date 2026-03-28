@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Sidebar } from './components/layout/Sidebar';
 import { HeaderFilter } from './components/layout/HeaderFilter';
 import { KanbanBoard } from './components/board/KanbanBoard';
 import { TaskSidePanel } from './components/task/TaskSidePanel';
@@ -17,11 +18,14 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <HeaderFilter />
-      <main>
-        <KanbanBoard onTaskClick={handleTaskClick} />
-      </main>
+    <div className="app-layout">
+      <Sidebar />
+      <div className="main-content">
+        <HeaderFilter />
+        <main>
+          <KanbanBoard onTaskClick={handleTaskClick} />
+        </main>
+      </div>
       
       <TaskSidePanel 
         task={selectedTask}
