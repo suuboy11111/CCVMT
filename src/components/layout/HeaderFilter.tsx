@@ -5,8 +5,11 @@ import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { mockUsers } from '../../services/userService';
 import { Avatar } from '../ui/Avatar';
+import { CreateTaskModal } from '../task/CreateTaskModal';
 
 export const HeaderFilter: React.FC = () => {
+  const [isTaskModalOpen, setIsTaskModalOpen] = React.useState(false);
+
   return (
     <header className={styles.header}>
       <div className={styles.left}>
@@ -25,8 +28,13 @@ export const HeaderFilter: React.FC = () => {
             <Avatar key={u.id} name={u.name} />
           ))}
         </div>
-        <Button icon={<Plus size={16} />}>Tạo Task</Button>
+        <Button icon={<Plus size={16} />} onClick={() => setIsTaskModalOpen(true)}>Tạo Task</Button>
       </div>
+
+      <CreateTaskModal 
+        isOpen={isTaskModalOpen} 
+        onClose={() => setIsTaskModalOpen(false)} 
+      />
     </header>
   );
 };

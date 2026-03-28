@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './KanbanBoard.module.css';
 import type { Task, TaskStatus } from '../../types';
-import { taskService } from '../../services/taskService';
 import { TaskCard } from './TaskCard';
+import { useAppContext } from '../../context/AppContext';
 
 interface KanbanBoardProps {
   onTaskClick: (task: Task) => void;
@@ -16,32 +16,20 @@ const COLUMNS: { id: TaskStatus; title: string }[] = [
 ];
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick }) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { tasks, activeProjectId, updateTaskStatus } = useAppContext();
 
-  useEffect(() => {
-    taskService.getTasks().then(data => {
-      setTasks(data);
-      setLoading(false);
-    });
-  }, []);
+  // Lọc task theo project đang chọn
+  const projectTasks = tasks.filter(t => t.projectId === activeProjectId);
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     e.dataTransfer.setData('taskId', taskId);
   };
 
-  const handleDrop = async (e: React.DragEvent, status: TaskStatus) => {
+  const handleDrop = (e: React.DragEvent, status: TaskStatus) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData('taskId');
-    
-    // Optimistic Update
-    setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status } : t));
-    
-    try {
-      await taskService.updateTaskStatus(taskId, status);
-    } catch (err) {
-      console.error(err);
-      // Giật dữ liệu lại nếu lỗi (trong thực tế)
+    if (taskId) {
+      updateTaskStatus(taskId, status);
     }
   };
 
@@ -49,7 +37,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick }) => {
     e.preventDefault();
   };
 
-  if (loading) return <div className={styles.loading}>Đang tải dữ liệu...</div>;
+  if (!activeProjectId) {
+    return <div className={styles.loading}>Vui lòng chọn hoặc tạo dự án mới...</div>;
+  }
 
   return (
     <div className={styles.boardContainer}>
@@ -64,11 +54,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick }) => {
             <div className={styles.columnHeader}>
               <h2 className={styles.columnTitle}>{col.title}</h2>
               <span className={styles.count}>
-                {tasks.filter(t => t.status === col.id).length}
+                {projectTasks.filter(t => t.status === col.id).length}
               </span>
             </div>
             <div className={styles.columnBody}>
-              {tasks.filter(t => t.status === col.id).map(task => (
+              {projectTasks.filter(t => t.status === col.id).map(task => (
                 <div 
                   key={task.id} 
                   draggable 

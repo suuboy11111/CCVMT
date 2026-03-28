@@ -14,6 +14,13 @@ export interface Comment {
   createdAt: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  key: string; // VD: PRE, WEB, APP
+  createdAt: string;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -22,6 +29,7 @@ export interface Task {
   type: TaskType;
   assigneeId?: string;
   reporterId: string;
+  projectId: string; // Bổ sung
   createdAt: string;
   comments?: Comment[];
 }
