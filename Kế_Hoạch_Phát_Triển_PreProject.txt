@@ -1,0 +1,42 @@
+# PREPROJECT - KẾ HOẠCH PHÁT TRIỂN & CẤU TRÚC DỰ ÁN
+
+## 1. Giới thiệu
+PreProject là một nền tảng quản lý dự án linh hoạt được xây dựng cho môn học "Công cụ và môi trường phát triển phần mềm".
+Mục tiêu là mô phỏng lại luồng làm việc Agile (quản lý Task, Story, Epic) qua bảng Kanban (To do, In Progress, Review, Done) với một giao diện tối giản, trực quan và hiện đại hơn (phong cách Linear/Notion).
+
+## 2. Công nghệ sử dụng
+- **Frontend**: React (TypeScript) + Vite (tốc độ cao, dễ build, tránh lỗi typing).
+- **Styling**: Vanilla CSS thuần với các biến CSS (CSS Variables) để kiểm soát Dark Mode, làm hiệu ứng trượt mượt mà (Glassmorphism). Không phụ thuộc UI framework để dễ bảo vệ/giải thích code.
+- **Database (Tương lai)**: Chừa sẵn kiến trúc Service Layer để tích hợp Firebase (Firestore). Lựa chọn này giúp làm việc nhóm dễ dàng mà không cần cài đặt database nội bộ phức tạp.
+
+## 3. Kiến trúc thư mục (Khung xương Frontend)
+
+/src
+ ├── /components      # Các thành phần giao diện tái sử dụng
+ │    ├── /ui         # Component cơ sở (Button, Avatar, Badge, Input...)
+ │    ├── /board      # Cấu trúc bảng Kanban (KanbanBoard, TaskCard...)
+ │    ├── /layout     # Layout chính (Header, Sidebar...)
+ │    └── /task       # Thanh trượt chi tiết Task (TaskSidePanel)
+ ├── /styles          # CSS toàn cục và các biến màu sắc (Dark mode)
+ ├── /types           # Định nghĩa cấu trúc dữ liệu cơ bản (User, Task, Epic...)
+ ├── /services        # Nơi chứa các API Fake. Sau này sẽ gọi tới Firebase ở đây.
+ ├── /utils           # Các hàm định dạng tĩnh (format định dạng ngày, filter logic...)
+ ├── App.tsx          # Component gốc gắn kết toàn bộ ứng dụng
+ └── main.tsx         # Điểm khởi chạy của Vite + React
+
+## 4. Kế hoạch Triển khai (Roadmap)
+
+- **Giai đoạn 1**: 
+  - Hoàn thành giao diện Dark Mode phẳng hiện đại.
+  - Setup 4 cột Kanban cơ bản.
+  - Tạo dữ liệu giả (Mock Data) gắn với các thẻ công việc (Avatar, Status Badge...).
+  - Làm thanh công cụ tìm kiếm và lọc task nhanh.
+  - Xây dựng thanh trượt chi tiết (Side-Panel) hiện ra mượt mà khi bấm vào Task.
+  
+- **Giai đoạn 2 (Chuẩn bị tích hợp thật)**:
+  - Tạo các hàm Service (CRUD) mô phỏng độ trễ (Delay).
+  - Có thể thực thi kéo thả (Drag & Drop) qua lại giữa các cột.
+
+- **Giai đoạn 3 (Nhóm kết nối)**:
+  - Gắn Firebase Config vào `/services`.
+  - Thay phiên nhau pull code và review.

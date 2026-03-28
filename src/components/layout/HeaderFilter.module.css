@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-app);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.left, .right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.search {
+  width: 250px;
+}
+
+.users {
+  display: flex;
+  align-items: center;
+}
+
+.users > div {
+  margin-left: -8px;
+  border: 2px solid var(--bg-app);
+}

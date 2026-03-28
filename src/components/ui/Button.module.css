@@ -1,0 +1,70 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.primary {
+  background-color: var(--accent-blue);
+  color: #fff;
+}
+.primary:hover:not(:disabled) {
+  background-color: var(--accent-blue-hover);
+  box-shadow: 0 0 10px rgba(94, 106, 210, 0.4);
+}
+
+.secondary {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.secondary:hover:not(:disabled) {
+  background-color: var(--bg-card-hover);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+.ghost:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.danger {
+  background-color: rgba(226, 117, 117, 0.1);
+  color: var(--accent-red);
+}
+.danger:hover:not(:disabled) {
+  background-color: var(--accent-red);
+  color: #fff;
+}
+
+/* Sizes */
+.sm {
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+.md {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+}
+.lg {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+}
+
+.icon {
+  display: flex;
+}

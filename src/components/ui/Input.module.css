@@ -1,0 +1,38 @@
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-secondary);
+  display: flex;
+}
+
+.input {
+  width: 100%;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.hasIcon {
+  padding-left: 36px;
+}
+
+.input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(94, 106, 210, 0.2);
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+}

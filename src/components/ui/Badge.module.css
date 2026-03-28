@@ -1,0 +1,35 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.blue {
+  background-color: rgba(94, 106, 210, 0.15);
+  color: var(--accent-blue);
+}
+
+.green {
+  background-color: rgba(97, 179, 128, 0.15);
+  color: var(--accent-green);
+}
+
+.red {
+  background-color: rgba(226, 117, 117, 0.15);
+  color: var(--accent-red);
+}
+
+.purple {
+  background-color: rgba(157, 117, 221, 0.15);
+  color: var(--accent-purple);
+}
+
+.gray {
+  background-color: rgba(139, 141, 152, 0.15);
+  color: var(--text-secondary);
+}
