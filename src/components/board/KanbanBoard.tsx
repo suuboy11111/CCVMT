@@ -16,10 +16,14 @@ const COLUMNS: { id: TaskStatus; title: string }[] = [
 ];
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({ onTaskClick }) => {
-  const { tasks, activeProjectId, updateTaskStatus } = useAppContext();
+  const { tasks, activeProjectId, updateTaskStatus, searchQuery } = useAppContext();
 
-  // Lọc task theo project đang chọn
-  const projectTasks = tasks.filter(t => t.projectId === activeProjectId);
+  // Lọc task theo project đang chọn VÀ theo nội dung tìm kiếm
+  const projectTasks = tasks.filter(t => 
+    t.projectId === activeProjectId &&
+    (t.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+     (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase())))
+  );
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     e.dataTransfer.setData('taskId', taskId);

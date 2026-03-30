@@ -23,6 +23,12 @@
   margin-bottom: 8px;
 }
 
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .id {
   font-size: 0.75rem;
   color: var(--text-secondary);
@@ -41,6 +47,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.date {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .assignee {

@@ -6,8 +6,10 @@ import { Button } from '../ui/Button';
 import { mockUsers } from '../../services/userService';
 import { Avatar } from '../ui/Avatar';
 import { CreateTaskModal } from '../task/CreateTaskModal';
+import { useAppContext } from '../../context/AppContext';
 
 export const HeaderFilter: React.FC = () => {
+  const { searchQuery, setSearchQuery } = useAppContext();
   const [isTaskModalOpen, setIsTaskModalOpen] = React.useState(false);
 
   return (
@@ -18,6 +20,8 @@ export const HeaderFilter: React.FC = () => {
           <Input 
             placeholder="Tìm kiếm task, epic..." 
             icon={<Search size={16} />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>

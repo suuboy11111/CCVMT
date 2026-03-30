@@ -1,36 +1,38 @@
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--glass-bg);
-  backdrop-filter: blur(4px);
-  z-index: 40;
-}
-
 .panel {
   position: fixed;
   top: 0;
-  right: -500px;
-  width: 100%;
-  max-width: 500px;
-  height: 100vh;
-  background-color: var(--bg-app);
-  border-left: 1px solid var(--border-color);
-  z-index: 50;
-  transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  right: -550px;
+  width: 550px;
+  height: 100%;
+  background-color: var(--bg-sidebar);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+  border-left: 1px solid var(--border-color);
 }
 
 .panel.open {
   right: 0;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
 .header {
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -41,31 +43,92 @@
 }
 
 .id {
-  color: var(--text-secondary);
   font-family: monospace;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.minimalSelect {
+  background: transparent;
+  color: var(--accent-blue);
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.deleteBtn {
+  margin-left: 8px;
+  color: var(--text-secondary);
+  transition: color 0.1s;
+}
+
+.deleteBtn:hover {
+  color: var(--accent-red);
 }
 
 .closeBtn {
   color: var(--text-secondary);
-  padding: 4px;
-  border-radius: 4px;
+  transition: color 0.1s;
 }
 
 .closeBtn:hover {
-  background-color: var(--bg-card);
   color: var(--text-primary);
 }
 
 .content {
+  flex: 1;
   padding: 24px;
   overflow-y: auto;
-  flex: 1;
 }
 
-.title {
-  font-size: 1.5rem;
-  margin-bottom: 24px;
+.titleInput {
+  background: transparent;
+  width: 100%;
   color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 24px;
+  resize: none;
+  min-height: 44px;
+}
+
+.titleInput:hover, .titleInput:focus {
+  background: rgba(255, 255, 255, 0.05);
+  outline: none;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metaField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.metaField label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusSelect, .dateInput {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
 .section {
@@ -73,46 +136,63 @@
 }
 
 .section h3 {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 1rem;
+  color: var(--text-primary);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.description {
-  color: var(--text-primary);
-  background-color: var(--bg-card);
-  padding: 16px;
+.descriptionInput {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  min-height: 100px;
-}
-
-.meta {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.metaItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.metaItem strong {
   color: var(--text-primary);
+  padding: 12px;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-.emptyComments {
+.commentForm {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.commentTextarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  min-height: 80px;
+  margin-bottom: 10px;
+}
+
+.commentItem {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border-left: 2px solid var(--accent-blue);
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.commentHeader span {
   color: var(--text-secondary);
-  font-style: italic;
+}
+
+.commentContent {
   font-size: 0.9rem;
+  line-height: 1.5;
 }

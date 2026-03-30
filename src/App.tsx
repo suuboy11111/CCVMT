@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Sidebar } from './components/layout/Sidebar';
 import { HeaderFilter } from './components/layout/HeaderFilter';
 import { KanbanBoard } from './components/board/KanbanBoard';
+import { BacklogView } from './components/board/BacklogView';
+import { TimelineView } from './components/board/TimelineView';
+import { MembersView } from './components/project/MembersView';
 import { TaskSidePanel } from './components/task/TaskSidePanel';
 import type { Task } from './types';
 import './index.css';
 
+import { useAppContext } from './context/AppContext';
+
 function App() {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const { tasks, activeView } = useAppContext();
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const handleTaskClick = (task: Task) => {
-    setSelectedTask(task);
+    setSelectedTaskId(task.id);
   };
 
   const handleClosePanel = () => {
-    setSelectedTask(null);
+    setSelectedTaskId(null);
   };
+
+  const activeTask = tasks.find(t => t.id === selectedTaskId) || null;
 
   return (
     <div className="app-layout">
@@ -23,13 +31,16 @@ function App() {
       <div className="main-content">
         <HeaderFilter />
         <main>
-          <KanbanBoard onTaskClick={handleTaskClick} />
+          {activeView === 'BOARD' && <KanbanBoard onTaskClick={handleTaskClick} />}
+          {activeView === 'BACKLOG' && <BacklogView onTaskClick={handleTaskClick} />}
+          {activeView === 'MEMBERS' && <MembersView />}
+          {activeView === 'TIMELINE' && <TimelineView onTaskClick={handleTaskClick} />}
         </main>
       </div>
       
       <TaskSidePanel 
-        task={selectedTask}
-        isOpen={!!selectedTask}
+        task={activeTask}
+        isOpen={!!activeTask}
         onClose={handleClosePanel}
       />
     </div>

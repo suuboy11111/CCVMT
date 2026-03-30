@@ -1,0 +1,57 @@
+.container {
+  padding: 24px 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.header {
+  margin-bottom: 24px;
+}
+.title {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+}
+.table th, .table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.table th {
+  background: var(--bg-sidebar);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+.table tr:last-child td {
+  border-bottom: none;
+}
+.table tbody tr {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.taskId {
+  font-family: monospace;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.taskTitle {
+  color: var(--text-primary);
+  font-weight: 500;
+}

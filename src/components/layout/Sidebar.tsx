@@ -11,13 +11,17 @@ import {
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { CreateProjectModal } from '../project/CreateProjectModal';
+import { ProjectSettingsModal } from '../project/ProjectSettingsModal';
+import { Edit2 } from 'lucide-react';
+import type { Project } from '../../types';
 
 export const Sidebar: React.FC = () => {
-  const { projects, activeProjectId, setActiveProjectId, addProject } = useAppContext();
+  const { projects, activeProjectId, setActiveProjectId, addProject, activeView, setActiveView } = useAppContext();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = React.useState(false);
 
-  const activeProject = projects.find(p => p.id === activeProjectId) || projects[0];
+  const activeProject = projects.find((p: Project) => p.id === activeProjectId) || projects[0];
   return (
     <aside className={styles.sidebar}>
       {/* Brand Logo / Tên Dự Án Đang Chọn */}
@@ -29,12 +33,19 @@ export const Sidebar: React.FC = () => {
           <h2 className={styles.projectName}>{activeProject?.name || 'PreProject'}</h2>
           <span className={styles.subtext}>Dự án phần mềm</span>
         </div>
-        <ChevronDown size={16} className={styles.chevron} style={{ marginLeft: 'auto', color: 'var(--text-secondary)' }} />
+        <button 
+          className={styles.settingsBtn} 
+          onClick={(e) => { e.stopPropagation(); setIsSettingsModalOpen(true); }}
+          title="Cài đặt dự án"
+        >
+          <Edit2 size={14} />
+        </button>
+        <ChevronDown size={16} className={styles.chevron} style={{ color: 'var(--text-secondary)' }} />
       </div>
 
       {isDropdownOpen && (
         <div className={styles.projectDropdown}>
-          {projects.map(p => (
+          {projects.map((p: Project) => (
             <div 
               key={p.id} 
               className={`${styles.projectOption} ${p.id === activeProjectId ? styles.activeOption : ''}`}
@@ -56,34 +67,54 @@ export const Sidebar: React.FC = () => {
         onSubmit={(name, key) => addProject({ name, key })}
       />
 
+      {activeProject && (
+        <ProjectSettingsModal 
+          isOpen={isSettingsModalOpen}
+          onClose={() => setIsSettingsModalOpen(false)}
+          project={activeProject}
+        />
+      )}
+
       {/* Menu Các Chức Năng Chính */}
       <nav className={styles.navGroup}>
         <div className={styles.navLabel}>KHÔNG GIAN LÀM VIỆC</div>
         
-        <a href="#" className={`${styles.navItem} ${styles.active}`}>
+        <div 
+          className={`${styles.navItem} ${activeView === 'BOARD' ? styles.active : ''}`}
+          onClick={() => setActiveView('BOARD')}
+        >
           <LayoutDashboard size={18} />
           <span>Bảng (Kanban Board)</span>
-        </a>
+        </div>
         
-        <a href="#" className={styles.navItem}>
+        <div 
+          className={`${styles.navItem} ${activeView === 'BACKLOG' ? styles.active : ''}`}
+          onClick={() => setActiveView('BACKLOG')}
+        >
           <ListTodo size={18} />
-          <span>Backlog (Kế hoạch rớt)</span>
-        </a>
+          <span>Danh sách (Backlog)</span>
+        </div>
         
-        <a href="#" className={styles.navItem}>
+        <div 
+          className={`${styles.navItem} ${activeView === 'TIMELINE' ? styles.active : ''}`}
+          onClick={() => setActiveView('TIMELINE')}
+        >
           <CalendarDays size={18} />
           <span>Lịch trình (Timeline)</span>
-        </a>
+        </div>
       </nav>
 
       <div className={styles.spacer} />
 
       {/* Cài đặt phần mềm */}
       <nav className={styles.navGroup}>
-        <a href="#" className={styles.navItem}>
+        <div 
+          className={`${styles.navItem} ${activeView === 'MEMBERS' ? styles.active : ''}`}
+          onClick={() => setActiveView('MEMBERS')}
+        >
           <Settings size={18} />
-          <span>Cài đặt dự án</span>
-        </a>
+          <span>Thành viên dự án</span>
+        </div>
       </nav>
     </aside>
   );

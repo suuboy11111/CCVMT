@@ -1,5 +1,7 @@
 export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE';
 export type TaskType = 'TASK' | 'STORY' | 'EPIC' | 'BUG';
+export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH';
+export type AppView = 'BOARD' | 'BACKLOG' | 'TIMELINE' | 'MEMBERS';
 
 export interface User {
   id: string;
@@ -7,7 +9,7 @@ export interface User {
   avatarUrl?: string; // Tên viết tắt hoặc đường dẫn ảnh
 }
 
-export interface Comment {
+export interface TaskComment {
   id: string;
   userId: string;
   content: string;
@@ -19,6 +21,7 @@ export interface Project {
   name: string;
   key: string; // VD: PRE, WEB, APP
   createdAt: string;
+  memberIds: string[]; // Bổ sung quản lý thành viên thực tế
 }
 
 export interface Task {
@@ -27,9 +30,12 @@ export interface Task {
   description: string;
   status: TaskStatus;
   type: TaskType;
+  priority: TaskPriority; // Bổ sung độ ưu tiên
+  startDate?: string; // Bổ sung ngày bắt đầu (ISO)
+  dueDate?: string; // Bổ sung hạn chót (ISO)
   assigneeId?: string;
   reporterId: string;
-  projectId: string; // Bổ sung
+  projectId: string;
   createdAt: string;
-  comments?: Comment[];
+  comments?: TaskComment[];
 }

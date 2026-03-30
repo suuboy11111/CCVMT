@@ -1,0 +1,141 @@
+.container {
+  padding: 32px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.timelineWrapper {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-card);
+  display: flex;
+}
+
+.taskNames {
+  width: 200px;
+  border-right: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+}
+
+.taskNameHeader {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.taskNameItem {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.taskNameItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.chartArea {
+  flex: 1;
+  position: relative;
+  min-width: 800px;
+}
+
+.timelineHeader {
+  height: 48px;
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dayColumn {
+  flex: 1;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.today {
+  background: rgba(94, 106, 210, 0.05);
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+.chartGrid {
+  position: relative;
+}
+
+.gridRow {
+  height: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.taskBar {
+  position: absolute;
+  top: 8px;
+  height: 24px;
+  border-radius: 4px;
+  background: var(--accent-blue);
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.taskBar:hover {
+  opacity: 1;
+  filter: brightness(1.2);
+}
+
+.priorityHIGH { background: var(--accent-red); }
+.priorityMEDIUM { background: var(--accent-orange); }
+.priorityLOW { background: var(--accent-blue); }
+
+.empty {
+  padding: 100px 0;
+  text-align: center;
+  color: var(--text-secondary);
+}
