@@ -10,6 +10,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { CreateProjectModal } from '../project/CreateProjectModal';
 import { ProjectSettingsModal } from '../project/ProjectSettingsModal';
 import { Edit2 } from 'lucide-react';
@@ -17,6 +18,7 @@ import type { Project } from '../../types';
 
 export const Sidebar: React.FC = () => {
   const { projects, activeProjectId, setActiveProjectId, addProject, activeView, setActiveView } = useAppContext();
+  const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = React.useState(false);
@@ -106,7 +108,7 @@ export const Sidebar: React.FC = () => {
 
       <div className={styles.spacer} />
 
-      {/* Cài đặt phần mềm */}
+      {/* User và Cài đặt */}
       <nav className={styles.navGroup}>
         <div 
           className={`${styles.navItem} ${activeView === 'MEMBERS' ? styles.active : ''}`}
@@ -116,6 +118,23 @@ export const Sidebar: React.FC = () => {
           <span>Thành viên dự án</span>
         </div>
       </nav>
+
+      {/* User Profile */}
+      <div className={styles.userProfile}>
+        <div className={styles.userAvatar}>
+          {user?.photoURL ? (
+            <img src={user.photoURL} alt={user.displayName || ''} />
+          ) : (
+            <div className={styles.avatarPlaceholder}>
+              {user?.displayName?.charAt(0) || 'U'}
+            </div>
+          )}
+        </div>
+        <div className={styles.userInfo}>
+          <span className={styles.userName}>{user?.displayName}</span>
+          <button className={styles.logoutBtn} onClick={logout}>Đăng xuất</button>
+        </div>
+      </div>
     </aside>
   );
 };

@@ -6,14 +6,25 @@ import { BacklogView } from './components/board/BacklogView';
 import { TimelineView } from './components/board/TimelineView';
 import { MembersView } from './components/project/MembersView';
 import { TaskSidePanel } from './components/task/TaskSidePanel';
+import { LoginPage } from './components/auth/LoginPage';
+import { useAuth } from './context/AuthContext';
 import type { Task } from './types';
 import './index.css';
 
 import { useAppContext } from './context/AppContext';
 
 function App() {
+  const { user, loading } = useAuth();
   const { tasks, activeView } = useAppContext();
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  if (loading) {
+    return <div className="loading-screen">Đang tải...</div>;
+  }
+
+  if (!user) {
+    return <LoginPage />;
+  }
 
   const handleTaskClick = (task: Task) => {
     setSelectedTaskId(task.id);

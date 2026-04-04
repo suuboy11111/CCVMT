@@ -94,3 +94,16 @@ main {
   flex: 1;
   overflow: hidden; /* KanbanBoard assumes it can scroll */
 }
+
+/* Loading screen */
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-app);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 500;
+}

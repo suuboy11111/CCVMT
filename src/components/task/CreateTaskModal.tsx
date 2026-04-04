@@ -4,8 +4,8 @@ import { X, Calendar, Flag } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import type { TaskType, TaskPriority } from '../../types';
-import { mockUsers } from '../../services/userService';
 import { useAppContext } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface CreateTaskModalProps {
   isOpen: boolean;
@@ -13,8 +13,9 @@ interface CreateTaskModalProps {
 }
 
 export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose }) => {
-  const { activeProjectId, addTask, projects } = useAppContext();
-  
+  const { activeProjectId, addTask, users } = useAppContext();
+  const { user } = useAuth();
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState<TaskType>('TASK');
@@ -22,31 +23,38 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
   const [dueDate, setDueDate] = useState(new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0]);
   const [assigneeId, setAssigneeId] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const activeProject = projects.find(p => p.id === activeProjectId);
-  const projectMembers = mockUsers.filter(u => activeProject?.memberIds.includes(u.id));
+  // Dùng users thật từ context (đã được lọc theo project)
+  const projectMembers = users;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !activeProjectId) return;
-    
-    addTask({
-      title,
-      description,
-      status: 'TODO',
-      type,
-      priority,
-      startDate: new Date(startDate).toISOString(),
-      dueDate: new Date(dueDate).toISOString(),
-      assigneeId: assigneeId || undefined,
-      reporterId: 'u-1',
-      projectId: activeProjectId
-    });
-    
-    resetForm();
-    onClose();
+    if (!title.trim() || !activeProjectId || !user || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await addTask({
+        title: title.trim(),
+        description,
+        status: 'TODO',
+        type,
+        priority,
+        startDate: new Date(startDate).toISOString(),
+        dueDate: new Date(dueDate).toISOString(),
+        assigneeId: assigneeId || undefined,
+        reporterId: user.uid, // Dùng uid của user thật
+        projectId: activeProjectId,
+      });
+      resetForm();
+      onClose();
+    } catch (e) {
+      console.error('Failed to create task:', e);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -59,29 +67,41 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
     setAssigneeId('');
   };
 
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
   return (
-    <div className={styles.overlay}>
-      <form className={styles.modal} onSubmit={handleSubmit} style={{maxWidth: '600px'}}>
+    <div className={styles.overlay} onClick={handleClose}>
+      <form
+        className={styles.modal}
+        onSubmit={handleSubmit}
+        style={{ maxWidth: '600px' }}
+        onClick={e => e.stopPropagation()}
+      >
         <div className={styles.header}>
           <h2>Tạo Công Việc Mới</h2>
-          <button type="button" className={styles.closeBtn} onClick={onClose}><X size={20} /></button>
+          <button type="button" className={styles.closeBtn} onClick={handleClose}>
+            <X size={20} />
+          </button>
         </div>
-        
+
         <div className={styles.body}>
           <div className={styles.field}>
             <label>Tiêu đề *</label>
-            <Input 
+            <Input
               autoFocus
-              placeholder="Nhập tên công việc..." 
-              value={title} 
-              onChange={e => setTitle(e.target.value)} 
+              placeholder="Nhập tên công việc..."
+              value={title}
+              onChange={e => setTitle(e.target.value)}
               required
             />
           </div>
 
           <div className={styles.field}>
             <label>Mô tả</label>
-            <textarea 
+            <textarea
               className={`${styles.select} ${styles.textarea}`}
               placeholder="Mô tả công việc..."
               value={description}
@@ -92,7 +112,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div className={styles.field}>
               <label>Loại & Độ ưu tiên</label>
-              <div style={{display: 'flex', gap: '8px'}}>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 <select className={styles.select} value={type} onChange={e => setType(e.target.value as TaskType)}>
                   <option value="TASK">Task</option>
                   <option value="STORY">Story</option>
@@ -112,7 +132,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
               <select className={styles.select} value={assigneeId} onChange={e => setAssigneeId(e.target.value)}>
                 <option value="">-- Chưa gán --</option>
                 {projectMembers.map(u => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
+                  <option key={u.uid} value={u.uid}>{u.name}</option>
                 ))}
               </select>
             </div>
@@ -121,18 +141,30 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div className={styles.field}>
               <label><Calendar size={14} /> Ngày bắt đầu</label>
-              <input type="date" className={styles.select} value={startDate} onChange={e => setStartDate(e.target.value)} />
+              <input
+                type="date"
+                className={styles.select}
+                value={startDate}
+                onChange={e => setStartDate(e.target.value)}
+              />
             </div>
             <div className={styles.field}>
               <label><Flag size={14} /> Hạn chót</label>
-              <input type="date" className={styles.select} value={dueDate} onChange={e => setDueDate(e.target.value)} />
+              <input
+                type="date"
+                className={styles.select}
+                value={dueDate}
+                onChange={e => setDueDate(e.target.value)}
+              />
             </div>
           </div>
         </div>
 
         <div className={styles.footer}>
-          <Button type="button" variant="ghost" onClick={onClose}>Hủy</Button>
-          <Button type="submit" variant="primary">Tạo công việc</Button>
+          <Button type="button" variant="ghost" onClick={handleClose}>Hủy</Button>
+          <Button type="submit" variant="primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Đang tạo...' : 'Tạo công việc'}
+          </Button>
         </div>
       </form>
     </div>
